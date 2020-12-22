@@ -1,0 +1,10 @@
+.idea/
+__pycache__/
+*.db
+*.bak
+test
+run.bat
+config.json
+ccsun.json
+venv/
+node_modules/

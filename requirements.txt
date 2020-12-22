@@ -1,0 +1,7 @@
+kuriyama==0.3.6
+Flask_Cors==3.0.9
+requests==2.24.0
+Flask==1.1.2
+beautifulsoup4==4.9.3
+mirai==0.1.5
+python_dateutil==2.8.1
