@@ -37,7 +37,7 @@ class CCSUN:
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_0) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/55.0.2883.95 Safari/537.36 '
     }
-    configPath = "../config/"
+
     configPath = "config/"
     def getYesterday(self):
         today = datetime.date.today()
@@ -62,7 +62,7 @@ CREATE TABLE "ccsun" (
   CONSTRAINT "date" UNIQUE ("date" ASC)
 )''')
         conn.close()
-        print('数据库不存在,已生成新数据库')
+        print('[Notice] New database created')
 
     def updateData(self, date, upload, download, uploaded, downloaded):
         conn = sqlite3.connect(f'{self.configPath}data.db')
@@ -95,7 +95,7 @@ CREATE TABLE "ccsun" (
         cookies = res.cookies
         cookie = requests.utils.dict_from_cookiejar(cookies)
         self.config["cookie"] = cookie
-        print("ccsun重新登陆" + str(cookie))
+        print("[CCSUN Login]" + str(cookie))
         self.saveConfig()
         return cookie
 
@@ -114,7 +114,6 @@ CREATE TABLE "ccsun" (
             self.saveConfig()
             return token
         except Exception as e:
-            print(e)
             return str(f'[refreshToken Error]\n{e}')
 
     def getBandwidth(self):
