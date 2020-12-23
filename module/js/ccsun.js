@@ -2,7 +2,9 @@ const puppeteer = require('puppeteer');
 const fs = require('fs');
 const filename = "temp/" + process.argv[2];
 let day = +process.argv[3];
-const url = "http://127.0.0.1:8081/chart?day=" + day;
+
+const port = '8881'
+const url = `http://127.0.0.1:${port}/chart?day=${day}`;
 
 if (!fs.existsSync('temp/')) {
     fs.mkdirSync('temp/')
@@ -32,7 +34,6 @@ if (day > 180) { day = 180 }
 
     await page.setViewport({width: Math.round(w), height: Math.round(doc.height)});
 
-    // await page.waitFor(2000);
     await setTimeout(async () => {
         await page.screenshot({path: filename, quality: 76});
         await browser.close();

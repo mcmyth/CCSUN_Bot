@@ -1,19 +1,21 @@
 const defer = $.Deferred();
 const _r = function () {
+    const port = '8881'
     $.ajax({
-        url: 'http://127.0.0.1:8081/api/ccsun?day=' + GetQueryString("day"),
+        url: `http://127.0.0.1:${port}/api/ccsun?day=${GetQueryString("day")}`,
         success: function (result) {
             defer.resolve(result);
         }
     });
     return defer.promise();
 };
+
 $.when(_r()).done(function (result) {
     loaded(JSON.parse(result));
 });
 
 function loaded(json_src) {
-    const plotOptions = {
+        const plotOptions = {
         line: {
             dataLabels: {
                 enabled: true
@@ -42,10 +44,7 @@ function loaded(json_src) {
         },
         plotOptions
     });
-    let download;
-    let upload;
-    let date;
-    date = download = upload = [];
+    let date = [];let download = [];let upload = [];
     for (let i = 0; i < json_src["data"].length; i++) {
         date.push(json_src["data"][i]["date"]);
         chart1.xAxis[0].setCategories(date);
@@ -57,6 +56,7 @@ function loaded(json_src) {
         name: '下载',
         data: download
     });
+
     chart1.addSeries({
         name: '上传',
         data: upload
@@ -82,17 +82,19 @@ function loaded(json_src) {
         plotOptions
     });
 
-    date = download = upload = [];
+    date = [];download = [];upload = [];
     for (let i = 0; i < json_src["data"].length; i++) {
         date.push(json_src["data"][i]["date"]);
         chart2.xAxis[0].setCategories(date);
         download.push(parseFloat(json_src["data"][i]["used"]["download"]));
         upload.push(parseFloat(json_src["data"][i]["used"]["upload"]));
     }
+
     chart2.addSeries({
         name: '下载',
         data: download
     });
+
     chart2.addSeries({
         name: '上传',
         data: upload
@@ -107,5 +109,5 @@ function GetQueryString(name) {
         context = r[2];
     reg = null;
     r = null;
-    return context == null || context === "" || context === "undefined" ? "" : context;
+    return context == null || context == "" || context == "undefined" ? "" : context;
 }
