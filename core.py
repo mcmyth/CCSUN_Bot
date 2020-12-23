@@ -24,8 +24,9 @@ async def Timer1():
         sent = True
         try:
             info = CCSUN.sendBandwidth(True)
+            if CCSUN.resetTotal():
+                await app.sendGroupMessage(ccsunGroup, '[Notice] 月结日已重置流量')
             await app.sendGroupMessage(ccsunGroup, info)
-            pass
         except:
             pass
     if timeNow != trigger_time and sent == True:
