@@ -53,10 +53,10 @@ async def run_command(type: str, data: dict):
             if cqMessage == "登录":
                 CCSUN.Login()
                 await app.sendGroupMessage(ccsunGroup, '已登录')
-                pass
             if cqMessage == "流量":
                 info = CCSUN.sendBandwidth()
                 if info.find('Error') != -1:
+                    CCSUN.Login()
                     CCSUN.refreshToken()
                     info = CCSUN.sendBandwidth()
                 await app.sendGroupMessage(ccsunGroup, info)
