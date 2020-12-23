@@ -35,6 +35,8 @@ async def Timer1():
 t = RepeatingTimer(3, Timer1)
 t.start()
 
+CCSUN = CCSUN()
+
 # 运行指令
 async def run_command(type: str, data: dict):
     app = data[Mirai]
