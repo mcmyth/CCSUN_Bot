@@ -34,8 +34,6 @@ async def Timer1():
 
 t = RepeatingTimer(3, Timer1)
 t.start()
-CCSUN = CCSUN(False)
-
 
 # 运行指令
 async def run_command(type: str, data: dict):
@@ -55,6 +53,9 @@ async def run_command(type: str, data: dict):
                 pass
             if cqMessage == "流量":
                 info = CCSUN.sendBandwidth()
+                if info.find('Error') != -1:
+                    CCSUN.refreshToken()
+                    info = CCSUN.sendBandwidth()
                 await app.sendGroupMessage(ccsunGroup, info)
             if cqMessage == "订阅":
                 info = CCSUN.getSubscribe()

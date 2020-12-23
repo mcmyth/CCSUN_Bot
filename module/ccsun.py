@@ -138,6 +138,8 @@ CREATE TABLE "ccsun" (
     def sendBandwidth(self, update=False):
         try:
             data = self.getBandwidth()
+            if data == {}:
+                raise Exception('获取数据失败')
             upload = gbUnitConverter(data['upload'], 'byte')
             download = gbUnitConverter(data['download'], 'byte')
             total = gbUnitConverter(data['total'], 'byte')
