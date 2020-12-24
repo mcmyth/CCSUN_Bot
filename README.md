@@ -1,7 +1,7 @@
 # CCSUN Bot
 
 ![Python version](https://img.shields.io/badge/Python-3.8.5-blue)
-![Node version](https://img.shields.io/badge/nodejs-14.15.1-brightgreen)
+![Node version](https://img.shields.io/badge/Nodejs-14.15.1-brightgreen)
 
 基于Mirai-Python / Nodejs实现
 
@@ -9,7 +9,7 @@
 
 ## 主要功能
 
-* 用于每天0点自动推送CCSUN流量
+* 用于每天0点自动推送CCSUN流量详情
 * 获取订阅链接
 
 * 查询流量
@@ -72,7 +72,7 @@
 
 ## 运行
 
-1. 配置并正确运行Mirai-Core及*mirai*-http-api
+1. 配置并正确运行mirai-core及*mirai*-http-api
 2. requirements.txt 是所需第三方模块，在项目坐在目录cmd中执行 `pip install -r requirements.txt` 安装模块  
 3. 在项目所在目录 cmd 中执行``python main.py ``
 
@@ -80,5 +80,5 @@
 
 1. 流量  **\* 查询当天和总计使用流量**
 2. 订阅  **\* 获取订阅链接**
-3. 图表 或 图表[天数]  **例: 图表15**
+3. 图表 或 图表[天数]  **\*例: 图表15**
 4. /ccsun update  **\* 强制提交当天流量到数据库和配置文件**
