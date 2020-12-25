@@ -44,7 +44,8 @@ function loaded(json_src) {
     let download = [];
     let upload = [];
     for (let i = 0; i < json_src["data"].length; i++) {
-        date.push(json_src["data"][i]["date"]);
+        const _date = json_src["data"][i]["date"].slice(5)
+        date.push(_date);
         chart1.xAxis[0].setCategories(date);
         download.push(parseFloat(json_src["data"][i]["download"]));
         upload.push(parseFloat(json_src["data"][i]["upload"]));
@@ -84,7 +85,8 @@ function loaded(json_src) {
     download = [];
     upload = [];
     for (let i = 0; i < json_src["data"].length; i++) {
-        date.push(json_src["data"][i]["date"]);
+        const _date = json_src["data"][i]["date"].slice(5)
+        date.push(_date);
         chart2.xAxis[0].setCategories(date);
         download.push(parseFloat(json_src["data"][i]["used"]["download"]));
         upload.push(parseFloat(json_src["data"][i]["used"]["upload"]));
