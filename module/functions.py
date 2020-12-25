@@ -1,11 +1,5 @@
 import re
-from module.dateParse import *
 
-def numOnly(num):
-    number = ""
-    for x in list(filter(str.isdigit, num)):
-        number += x
-    return number
 
 def is_number(s):
     try:
@@ -21,7 +15,7 @@ def is_number(s):
     except (TypeError, ValueError):
         pass
     return False
-DateTimeGenerator = DateTimeGenerator()
+
 
 def commandDecode(command):
     regex = r'(\\s*(".+?"|[^:\s])+((\s*:\s*(".+?"|[^\s])+)|)|("(\D|\d)+?^|"(\D|\d)+?"|"+|[^"\s])+)'
