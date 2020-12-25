@@ -39,6 +39,7 @@ class CCSUN:
     }
 
     configPath = "config/"
+
     def getYesterday(self):
         today = datetime.date.today()
         oneday = datetime.timedelta(days=1)
@@ -118,13 +119,12 @@ CREATE TABLE "ccsun" (
 
     def getBandwidth(self):
         session = requests.session()
-        url = f'https://z96w.win/modules/servers/V2RaySocks/additional-features/flow-scriptable/flow-scriptable.php?sid={self.product}&token={self.token}'
+        url = f'https://{self.domain}/modules/servers/V2RaySocks/additional-features/flow-scriptable/flow-scriptable.php?sid={self.product}&token={self.token}'
         try:
-            res = session.get(url, headers=self.headers, cookies=self.config["cookie"], verify=False, allow_redirects=False)
+            res = session.get(url, headers=self.headers, verify=False, allow_redirects=False)
             source = res.content.decode('utf-8')
             source = source.replace(' ', '').replace('Subscription-Userinfo:', '').split(';')
             source.pop()
-
             config = {}
             for item in source:
                 key = item.split('=')[0]
@@ -146,7 +146,7 @@ CREATE TABLE "ccsun" (
             yesterdayUpload = self.config["yesterday"]["upload"]
             usedDownload = round(download - yesterdayDownload, 2)
             usedUpload = round(upload - yesterdayUpload, 2)
-            if (update == True):
+            if update == True:
                 isUpdate = self.updateData(self.getYesterday(), usedUpload, usedDownload, upload, download)
                 self.config["yesterday"]["download"] = download
                 self.config["yesterday"]["upload"] = upload
@@ -164,9 +164,10 @@ CREATE TABLE "ccsun" (
 
     def getSubscribe(self):
         session = requests.session()
-        url = f'https://z96w.win/clientarea.php?action=productdetails&id={self.product}'
+        url = f'https://{self.domain}/clientarea.php?action=productdetails&id={self.product}'
         try:
-            res = session.get(url, headers=self.headers, cookies=self.config["cookie"], verify=False, allow_redirects=False)
+            res = session.get(url, headers=self.headers, cookies=self.config["cookie"], verify=False,
+                              allow_redirects=False)
             html = res.content.decode('utf-8')
             soup = BeautifulSoup(html, "lxml")
             source = soup.select("div.subscribe-linktext")
