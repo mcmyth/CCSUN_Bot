@@ -14,7 +14,7 @@ if (day > 180) { day = 180 }
 
 (async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
     });
     const page = await browser.newPage();
     try {

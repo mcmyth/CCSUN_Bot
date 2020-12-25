@@ -1,12 +1,9 @@
-import sqlite3
-import sys
-import socket
-
+import sqlite3, sys, socket, json
 sys.path.append('..')
 from flask import Flask, request, render_template, url_for
-import json
 from flask_cors import *
-webApp = Flask (__name__)
+
+webApp = Flask(__name__)
 CORS(webApp, resources=r'/*')
 
 
@@ -15,22 +12,23 @@ def _ccsunAPI():
     args = request.args
     if 'day' in args:
         day = args["day"]
-        if day == "":day = "7"
+        if day == "": day = "7"
     else:
         day = "7"
     configPath = "config/"
     conn = sqlite3.connect(f'{configPath}data.db')
     cur = conn.cursor()
-    result =list(cur.execute( "SELECT * FROM ccsun WHERE date < DATE('now', '1 day') and date > DATE('now', '-" + str(day)+ " day')"))
+    result = list(cur.execute(
+        "SELECT * FROM ccsun WHERE date < DATE('now', '1 day') and date >= DATE('now', '-" + str(day) + " day')"))
     conn.commit()
     conn.close()
     jsonObj = {
-        "data":[],
+        "data": [],
         "status": "ok",
     }
     if len(result) > 0:
         for x in result:
-            id = x[0]
+            # id = x[0]
             date = x[1]
             upload = x[2]
             download = x[3]
@@ -38,9 +36,9 @@ def _ccsunAPI():
             downloaded = x[5]
             jsonObj["data"].append({
                 "date": date,
-                "upload":upload,
+                "upload": upload,
                 "download": download,
-                "used":{
+                "used": {
                     "upload": uploaded,
                     "download": downloaded
                 }
@@ -59,19 +57,18 @@ def _chart() -> str:
     return render_template('chart.htm')
 
 
-def net_is_used(port,ip='127.0.0.1'):
-    s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+def net_is_used(port, ip='127.0.0.1'):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     try:
-        s.connect((ip,port))
+        s.connect((ip, port))
         s.shutdown(2)
-        print('%s:%d is used' % (ip,port))
+        print('%s:%d is used' % (ip, port))
         return True
     except:
-        print('%s:%d is unused' % (ip,port))
+        print('%s:%d is unused' % (ip, port))
         return False
 
 
 port = 8881
 if not net_is_used(port):
-    webApp.run(debug=True,port= port)
-
+    webApp.run(debug=True, port=port)
