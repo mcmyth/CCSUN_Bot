@@ -1,21 +1,17 @@
-const defer = $.Deferred();
-const _r = function () {
-    const port = '8881'
+const port = '8881'
+$(function () {
     $.ajax({
+        type: "GET",
+        contentType: "application/json;charset=UTF-8",
         url: `http://127.0.0.1:${port}/api/ccsun?day=${GetQueryString("day")}`,
         success: function (result) {
-            defer.resolve(result);
+            loaded(JSON.parse(result));
         }
     });
-    return defer.promise();
-};
-
-$.when(_r()).done(function (result) {
-    loaded(JSON.parse(result));
 });
 
 function loaded(json_src) {
-        const plotOptions = {
+    const plotOptions = {
         line: {
             dataLabels: {
                 enabled: true
@@ -44,7 +40,9 @@ function loaded(json_src) {
         },
         plotOptions
     });
-    let date = [];let download = [];let upload = [];
+    let date = [];
+    let download = [];
+    let upload = [];
     for (let i = 0; i < json_src["data"].length; i++) {
         date.push(json_src["data"][i]["date"]);
         chart1.xAxis[0].setCategories(date);
@@ -82,7 +80,9 @@ function loaded(json_src) {
         plotOptions
     });
 
-    date = [];download = [];upload = [];
+    date = [];
+    download = [];
+    upload = [];
     for (let i = 0; i < json_src["data"].length; i++) {
         date.push(json_src["data"][i]["date"]);
         chart2.xAxis[0].setCategories(date);

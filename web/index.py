@@ -53,7 +53,7 @@ def _ccsunAPI():
 def _chart() -> str:
     url_for('static', filename='js/ccsun.js')
     url_for('static', filename='js/highcharts.js')
-    url_for('static', filename='js/jquery-1.7.1.min.js')
+    url_for('static', filename='js/zepto.min.js')
     return render_template('chart.htm')
 
 
