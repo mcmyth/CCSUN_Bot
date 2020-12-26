@@ -57,7 +57,7 @@
 {
   "login": {
     "password": "",
-    "username": "joinchang1206@gmail.com"
+    "username": ""
   },
   "user": {
     "product": "1234",
