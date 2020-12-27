@@ -23,12 +23,9 @@ async def Timer1():
     if timeNow == trigger_time and sent == False:
         sent = True
         try:
-            info = CCSUN.sendBandwidth(True)
-            if CCSUN.resetTotal():
-                await app.sendGroupMessage(ccsunGroup, '[Notice] 月结日已重置流量')
-            await app.sendGroupMessage(ccsunGroup, info)
-        except:
-            pass
+            await updateBandwidth()
+        except Exception as e:
+            print(e)
     if timeNow != trigger_time and sent == True:
         sent = False
 
@@ -37,6 +34,15 @@ t = RepeatingTimer(3, Timer1)
 t.start()
 
 CCSUN = CCSUN()
+
+
+# 更新流量
+async def updateBandwidth():
+    info = CCSUN.sendBandwidth(True)
+    if CCSUN.resetTotal():
+        await app.sendGroupMessage(ccsunGroup, '[Notice]\n月结日已重置流量')
+    await app.sendGroupMessage(ccsunGroup, info)
+
 
 # 运行指令
 async def run_command(type: str, data: dict):
@@ -52,7 +58,7 @@ async def run_command(type: str, data: dict):
             command = commandDecode(cqMessage)
             if cqMessage == "登录":
                 CCSUN.Login()
-                await app.sendGroupMessage(ccsunGroup, '已登录')
+                await app.sendGroupMessage(ccsunGroup, '[Notice]\n已登录')
             if cqMessage == "流量":
                 info = CCSUN.sendBandwidth()
                 if info.find('Error') != -1:
@@ -65,7 +71,7 @@ async def run_command(type: str, data: dict):
                 if info == '':
                     CCSUN.Login()
                     info = CCSUN.getSubscribe()
-                    if info == '' : info = '获取数据失败'
+                    if info == '' : info = '[getSubscribe Error]\n获取数据失败'
                 await app.sendGroupMessage(ccsunGroup, info)
             if cqMessage[:2] == "图表":
                 if len(cqMessage) >= 2:
@@ -73,12 +79,11 @@ async def run_command(type: str, data: dict):
                     if not is_number(day): day = "7"
                 if int(day) > 180:
                     day = "180"
-                    await app.sendGroupMessage(ccsunGroup, "最大查询过去180天的数据", quoteSource=source)
+                    await app.sendGroupMessage(ccsunGroup, "[Notice]\n最大查询过去180天的数据", quoteSource=source)
                 imagePath = CCSUN.getChart(source.id, day)
                 await app.sendGroupMessage(ccsunGroup, [Image.fromFileSystem(imagePath)])
                 os.remove(imagePath)
-            if command[0] == "/ccsun":
+            if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
                     if command[1] == "update":
-                        info = CCSUN.sendBandwidth(True)
-                        await app.sendGroupMessage(ccsunGroup, info)
+                        await updateBandwidth()
