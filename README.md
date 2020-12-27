@@ -19,9 +19,9 @@
 ![](https://tu.yaohuo.me/imgs/2020/12/b123f596fe8b18e6.jpg)
 
 ## 配置
-**注: 再此之前请先安装Python及Nodejs并安装所需依赖**
+**注: 再此之前请先配置Python及Nodejs的运行环境并安装所需依赖**
 * 安装Python依赖: 在项目路径下执行 ``pip install -r requirements.txt``
-* 安卓Nodejs依赖: 在项目路径下执行 ``npm i``
+* 安装Nodejs依赖: 在项目路径下执行 ``npm i``
 ****
 需正确配置下列信息
 
