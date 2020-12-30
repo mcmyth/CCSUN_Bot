@@ -18,6 +18,8 @@
 
 ![](https://tu.yaohuo.me/imgs/2020/12/b123f596fe8b18e6.jpg)
 
+![](https://tu.yaohuo.me/imgs/2020/12/40faa0fafb110d99.png)
+
 ## 配置
 **注: 再此之前请先配置Python及Nodejs的运行环境并安装所需依赖**
 * 安装Python依赖: 在项目路径下执行 ``pip install -r requirements.txt``
