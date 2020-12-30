@@ -6,5 +6,6 @@ test
 run.bat
 config.json
 ccsun.json
+ccsun.log
 venv/
 node_modules/
