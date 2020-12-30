@@ -16,16 +16,13 @@ ccsunGroup = configManager.config["ccsunGroup"]
 lock = False
 
 
-async def Timer1():
+async def auto_update():
     global lock
     trigger_time = "00:00"
     timeNow = time.strftime('%H:%M', time.localtime(time.time()))
 
     # Log
-    f = open("ccsun.log", 'a')
-    log = f"{trigger_time} | {timeNow} | Lock = {str(lock)}"
-    f.write(log)
-    f.close()
+    write_log(f"{trigger_time} | {timeNow} | Lock = {str(lock)}")
 
     if timeNow == trigger_time and lock == False:
         lock = True
@@ -36,11 +33,7 @@ async def Timer1():
             write_log(f"{trigger_time} | {timeNow} | Lock = {str(lock)}")
     if timeNow != trigger_time and lock == True:
         lock = False
-
-
-t = RepeatingTimer(3, Timer1)
-t.start()
-
+RepeatingTimer(3, auto_update).start()
 CCSUN = CCSUN(False)
 
 
@@ -63,10 +56,12 @@ async def run_command(type: str, data: dict):
         if group.id == ccsunGroup:
             info = ""
             cqMessage = CQEncoder.messageChainToCQ(message)
+            write_log(f"[↓][{member.id}]" + cqMessage)
             command = commandDecode(cqMessage)
             if cqMessage == "登录":
                 CCSUN.Login()
-                await app.sendGroupMessage(ccsunGroup, '[Notice]\n已登录')
+                info = '[Notice]\n已登录'
+                await app.sendGroupMessage(ccsunGroup, info)
             if cqMessage == "流量":
                 info = CCSUN.sendBandwidth()
                 if info.find('Error') != -1:
@@ -87,7 +82,8 @@ async def run_command(type: str, data: dict):
                     if not is_number(day): day = "7"
                 if int(day) > 180:
                     day = "180"
-                    await app.sendGroupMessage(ccsunGroup, "[Notice]\n最大查询过去180天的数据")
+                    info = "[Notice]\n最大查询过去180天的数据"
+                    await app.sendGroupMessage(ccsunGroup, info)
                 imagePath = CCSUN.getChart(source.id, day)
                 await app.sendGroupMessage(ccsunGroup, [Image.fromFileSystem(imagePath)])
                 os.remove(imagePath)
@@ -95,4 +91,4 @@ async def run_command(type: str, data: dict):
                 if len(command) >= 1:
                     if command[1].lower() == "update":
                         await updateBandwidth()
-            write_log(info)
+            write_log("[↑]" + info)
