@@ -43,14 +43,18 @@ function loaded(json_src) {
     let date = [];
     let download = [];
     let upload = [];
+    // let toal = 0;
     for (let i = 0; i < json_src["data"].length; i++) {
         const _date = json_src["data"][i]["date"].slice(5)
         date.push(_date);
         chart1.xAxis[0].setCategories(date);
-        download.push(parseFloat(json_src["data"][i]["download"]));
-        upload.push(parseFloat(json_src["data"][i]["upload"]));
+        let _download = parseFloat(json_src["data"][i]["download"]);
+        let _upload = parseFloat(json_src["data"][i]["upload"]);
+        download.push(_download);
+        upload.push(_upload);
+        // toal += _download + _upload
     }
-
+    // chart1.setTitle(null, { text: `合计:${String(toal.toFixed(2))}GB`});
     chart1.addSeries({
         name: '下载',
         data: download
@@ -84,14 +88,16 @@ function loaded(json_src) {
     date = [];
     download = [];
     upload = [];
+    // toal = 0;
     for (let i = 0; i < json_src["data"].length; i++) {
         const _date = json_src["data"][i]["date"].slice(5)
         date.push(_date);
         chart2.xAxis[0].setCategories(date);
-        download.push(parseFloat(json_src["data"][i]["used"]["download"]));
-        upload.push(parseFloat(json_src["data"][i]["used"]["upload"]));
+        let _download = parseFloat(json_src["data"][i]["used"]["download"]);
+        let _upload = parseFloat(json_src["data"][i]["used"]["upload"]);
+        download.push(_download);
+        upload.push(_upload);
     }
-
     chart2.addSeries({
         name: '下载',
         data: download
