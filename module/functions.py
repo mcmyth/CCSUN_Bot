@@ -1,4 +1,5 @@
 import re
+import time
 
 
 def is_number(s):
@@ -30,3 +31,9 @@ def commandDecode(command):
             c2.append(x[0])
         i = i + 1
     return (c2)
+
+
+def write_log(log):
+    f = open("ccsun.log", 'a')
+    f.write(f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}] {log}\n")
+    f.close()

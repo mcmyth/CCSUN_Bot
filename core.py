@@ -13,27 +13,35 @@ mirai_api_http_locate = configManager.config["user"]["httpapi"]
 app = Mirai(f"mirai://{mirai_api_http_locate}?authKey={authKey}&qq={qq}")
 
 ccsunGroup = configManager.config["ccsunGroup"]
-sent = False
+lock = False
 
 
 async def Timer1():
-    global sent
+    global lock
     trigger_time = "00:00"
     timeNow = time.strftime('%H:%M', time.localtime(time.time()))
-    if timeNow == trigger_time and sent == False:
-        sent = True
+
+    # Log
+    f = open("ccsun.log", 'a')
+    log = f"{trigger_time} | {timeNow} | Lock = {str(lock)}"
+    f.write(log)
+    f.close()
+
+    if timeNow == trigger_time and lock == False:
+        lock = True
         try:
             await updateBandwidth()
         except Exception as e:
             print(e)
-    if timeNow != trigger_time and sent == True:
-        sent = False
+            write_log(f"{trigger_time} | {timeNow} | Lock = {str(lock)}")
+    if timeNow != trigger_time and lock == True:
+        lock = False
 
 
 t = RepeatingTimer(3, Timer1)
 t.start()
 
-CCSUN = CCSUN()
+CCSUN = CCSUN(False)
 
 
 # 更新流量
@@ -52,8 +60,8 @@ async def run_command(type: str, data: dict):
         member = data[Member]
         source = data[Source]
         message = data[MessageChain]
-
         if group.id == ccsunGroup:
+            info = ""
             cqMessage = CQEncoder.messageChainToCQ(message)
             command = commandDecode(cqMessage)
             if cqMessage == "登录":
@@ -79,11 +87,12 @@ async def run_command(type: str, data: dict):
                     if not is_number(day): day = "7"
                 if int(day) > 180:
                     day = "180"
-                    await app.sendGroupMessage(ccsunGroup, "[Notice]\n最大查询过去180天的数据", quoteSource=source)
+                    await app.sendGroupMessage(ccsunGroup, "[Notice]\n最大查询过去180天的数据")
                 imagePath = CCSUN.getChart(source.id, day)
                 await app.sendGroupMessage(ccsunGroup, [Image.fromFileSystem(imagePath)])
                 os.remove(imagePath)
             if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
-                    if command[1] == "update":
+                    if command[1].lower() == "update":
                         await updateBandwidth()
+            write_log(info)
