@@ -4,7 +4,7 @@ const filename = "temp/" + process.argv[2];
 let day = +process.argv[3];
 
 const port = '8881'
-const url = `http://127.0.0.1:${port}/chart?day=${day - 1}`;
+const url = `http://127.0.0.1:${port}/chart?day=${day}`;
 
 if (!fs.existsSync('temp/')) {
     fs.mkdirSync('temp/')

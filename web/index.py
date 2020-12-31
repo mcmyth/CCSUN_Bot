@@ -18,8 +18,8 @@ def _ccsunAPI():
     configPath = "config/"
     conn = sqlite3.connect(f'{configPath}data.db')
     cur = conn.cursor()
-    result = list(cur.execute(
-        "SELECT * FROM ccsun WHERE date < DATE('now', '1 day') and date >= DATE('now', '-" + str(day) + " day')"))
+    query = f"SELECT * FROM ccsun WHERE date < DATE('now', '1 day') and date >= DATE('now', '-{str(day)} day')"
+    result = list(cur.execute(query))
     conn.commit()
     conn.close()
     jsonObj = {
