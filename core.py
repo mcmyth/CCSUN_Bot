@@ -22,7 +22,7 @@ async def auto_update():
     timeNow = time.strftime('%H:%M', time.localtime(time.time()))
 
     # Log
-    write_log(f"{trigger_time} | {timeNow} | Lock = {str(lock)}")
+    write_log(f"{timeNow} | Lock = {str(lock)}")
 
     if timeNow == trigger_time and lock == False:
         lock = True
@@ -31,7 +31,7 @@ async def auto_update():
             write_log("[↑]" + info)
         except Exception as e:
             print(e)
-            write_log(f"{trigger_time} | {timeNow} | Lock = {str(lock)}")
+            write_log(e)
     if timeNow != trigger_time and lock == True:
         lock = False
 RepeatingTimer(3, auto_update).start()

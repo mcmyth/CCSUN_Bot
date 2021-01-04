@@ -1,7 +1,7 @@
-import time
 import asyncio
 from threading import Thread, Event
 from functools import partial
+from module.functions import *
 
 class _Timer(Thread):
     """Call a function after a specified number of seconds:
@@ -36,6 +36,8 @@ class RepeatingTimer(_Timer):
             asyncio.set_event_loop(loop)
             loop.run_until_complete(self.function(*self.args, **self.kwargs))
             self.finished.wait(self.interval)
+        else:
+            write_log("[Warning] Timer stop")
 
 
 class asyncioInterval:
