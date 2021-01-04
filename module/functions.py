@@ -36,5 +36,5 @@ def commandDecode(command):
 def write_log(log):
     if log != "":
         f = open("ccsun.log", 'a')
-        f.write(f"[{time.strftime('%H:%M:%S', time.localtime(time.time()))}] {log}\n")
+        f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}] {log}\n")
         f.close()

@@ -27,7 +27,8 @@ async def auto_update():
     if timeNow == trigger_time and lock == False:
         lock = True
         try:
-            await updateBandwidth()
+            info = await updateBandwidth()
+            write_log("[↑]" + info)
         except Exception as e:
             print(e)
             write_log(f"{trigger_time} | {timeNow} | Lock = {str(lock)}")
@@ -43,6 +44,7 @@ async def updateBandwidth():
     if CCSUN.resetTotal():
         await app.sendGroupMessage(ccsunGroup, '[Notice]\n月结日已重置流量')
     await app.sendGroupMessage(ccsunGroup, info)
+    return info
 
 
 # 运行指令
@@ -87,8 +89,9 @@ async def run_command(type: str, data: dict):
                 imagePath = CCSUN.getChart(source.id, day)
                 await app.sendGroupMessage(ccsunGroup, [Image.fromFileSystem(imagePath)])
                 os.remove(imagePath)
+                info = "[↑] 发送图表"
             if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
                     if command[1].lower() == "update":
-                        await updateBandwidth()
+                        info = await updateBandwidth()
             write_log("[↑]" + info)
