@@ -1,11 +1,16 @@
-from module.ccsun import *
+import asyncio
+from threading import Thread
+from apscheduler.schedulers.blocking import BlockingScheduler
 from config.configManager import *
+from module.ccsun import *
 from module.cqEncoder import *
-from module.timer import RepeatingTimer
 from module.functions import *
 
+scheduler = BlockingScheduler()
 configManager = Config()
 CQEncoder = CQEncoder()
+CCSUN = CCSUN(False)
+
 # 运行命令
 qq = configManager.config["user"]["qq"]
 authKey = configManager.config["user"]["authKey"]
@@ -13,29 +18,47 @@ mirai_api_http_locate = configManager.config["user"]["httpapi"]
 app = Mirai(f"mirai://{mirai_api_http_locate}?authKey={authKey}&qq={qq}")
 
 ccsunGroup = configManager.config["ccsunGroup"]
-lock = False
+write_log("[Notice] CCSUN-Bot已启动")
+
+# 旧方案,Timer 会突然停止运作
+# lock = False
+# async def auto_update():
+#     global lock
+#     trigger_time = "00:00"
+#     timeNow = time.strftime('%H:%M', time.localtime(time.time()))
+#
+#     # Log
+#     write_log(f"{timeNow} | Lock = {str(lock)}")
+#
+#     if timeNow == trigger_time and lock == False:
+#         lock = True
+#         try:
+#             info = await updateBandwidth()
+#             write_log("[↑]" + info)
+#         except Exception as e:
+#             print(e)
+#             write_log(e)
+#     if timeNow != trigger_time and lock == True:
+#         lock = False
+# from module.timer import RepeatingTimer
+# RepeatingTimer(3, auto_update).start()
 
 
 async def auto_update():
-    global lock
-    trigger_time = "00:00"
-    timeNow = time.strftime('%H:%M', time.localtime(time.time()))
+    try:
+        info = await updateBandwidth()
+        write_log("[↑]" + info)
+    except Exception as e:
+        print(e)
+        write_log(e)
 
-    # Log
-    write_log(f"{timeNow} | Lock = {str(lock)}")
 
-    if timeNow == trigger_time and lock == False:
-        lock = True
-        try:
-            info = await updateBandwidth()
-            write_log("[↑]" + info)
-        except Exception as e:
-            print(e)
-            write_log(e)
-    if timeNow != trigger_time and lock == True:
-        lock = False
-RepeatingTimer(3, auto_update).start()
-CCSUN = CCSUN(False)
+@scheduler.scheduled_job('cron',  hour='0', minute='0', second='0')
+def run_timer():
+    asyncio.run(auto_update())
+
+
+Thread(target=scheduler.start).start()
 
 
 # 更新流量
@@ -89,9 +112,12 @@ async def run_command(type: str, data: dict):
                 imagePath = CCSUN.getChart(source.id, day)
                 await app.sendGroupMessage(ccsunGroup, [Image.fromFileSystem(imagePath)])
                 os.remove(imagePath)
-                info = "[↑] 发送图表"
+                info = "发送图表"
             if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
                     if command[1].lower() == "update":
                         info = await updateBandwidth()
-            write_log("[↑]" + info)
+            write_log("[↑] " + info)
+
+if __name__ == "__main__":
+    app.run()
