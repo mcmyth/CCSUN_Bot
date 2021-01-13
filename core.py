@@ -17,8 +17,9 @@ authKey = configManager.config["user"]["authKey"]
 mirai_api_http_locate = configManager.config["user"]["httpapi"]
 app = Mirai(f"mirai://{mirai_api_http_locate}?authKey={authKey}&qq={qq}")
 
-ccsunGroup = configManager.config["ccsunGroup"]
+ccsun_group = configManager.config["ccsunGroup"]
 write_log("[Notice] CCSUN-Bot已启动", 3)
+
 
 # 旧方案,Timer 会突然停止运作
 # lock = False
@@ -53,7 +54,7 @@ async def auto_update():
         write_log(e, 3)
 
 
-@scheduler.scheduled_job('cron',  hour='0', minute='0', second='0')
+@scheduler.scheduled_job('cron', hour='0', minute='0', second='0')
 def run_timer():
     asyncio.run(auto_update())
 
@@ -63,63 +64,67 @@ Thread(target=scheduler.start).start()
 
 # 更新流量
 async def updateBandwidth():
-    info = CCSUN.sendBandwidth(True)
+    info = CCSUN.getBandwidthStr(True)
     if CCSUN.resetTotal():
         notice = '[Notice]\n月结日已重置流量'
-        await app.sendGroupMessage(ccsunGroup, notice)
+        await app.sendGroupMessage(ccsun_group, notice)
         write_log(notice, 3)
-    await app.sendGroupMessage(ccsunGroup, info)
+    await app.sendGroupMessage(ccsun_group, info)
     return info
 
 
 # 运行指令
-async def run_command(type: str, data: dict):
-    app = data[Mirai]
-    if type == "group":
+async def run_command(message_type: str, data: dict):
+    mirai_app = data[Mirai]
+    if message_type == "group":
         group = data[Group]
         member = data[Member]
         source = data[Source]
         message = data[MessageChain]
-        if group.id == ccsunGroup:
+        if group.id == ccsun_group:
             info = ""
-            cqMessage = CQEncoder.messageChainToCQ(message)
-            write_log(f"[{member.id}]{cqMessage}", 1)
-            command = commandDecode(cqMessage)
-            if cqMessage == "登录":
+            cq_message = CQEncoder.messageChainToCQ(message)
+            write_log(f"[{member.id}]{cq_message}", 1)
+            command = commandDecode(cq_message)
+            if cq_message == "登录":
                 CCSUN.Login()
                 info = '[Notice]\n已登录'
-                await app.sendGroupMessage(ccsunGroup, info)
-            if cqMessage == "流量":
-                info = CCSUN.sendBandwidth()
+                await mirai_app.sendGroupMessage(ccsun_group, info)
+            if cq_message == "流量":
+                info = CCSUN.getBandwidthStr()
                 if info.find('Error') != -1:
                     CCSUN.Login()
                     CCSUN.refreshToken()
-                    info = CCSUN.sendBandwidth()
-                await app.sendGroupMessage(ccsunGroup, info)
-            if cqMessage == "订阅":
+                    info = CCSUN.getBandwidthStr()
+                await mirai_app.sendGroupMessage(ccsun_group, info)
+            if cq_message == "订阅":
                 info = CCSUN.getSubscribe()
                 if info == '':
                     CCSUN.Login()
                     info = CCSUN.getSubscribe()
-                    if info == '' : info = '[getSubscribe Error]\n获取数据失败'
-                await app.sendGroupMessage(ccsunGroup, info)
-            if cqMessage[:2] == "图表":
-                if len(cqMessage) >= 2:
-                    day = cqMessage[2:]
-                    if not is_number(day): day = "7"
+                    if info == '':
+                        info = '[getSubscribe Error]\n获取数据失败'
+                await mirai_app.sendGroupMessage(ccsun_group, info)
+            if cq_message[:2] == "图表":
+                day = ""
+                if len(cq_message) >= 2:
+                    day = cq_message[2:]
+                    if not is_number(day):
+                        day = "7"
                 if int(day) > 180:
                     day = "180"
                     info = "[Notice]\n最大查询过去180天的数据"
-                    await app.sendGroupMessage(ccsunGroup, info)
-                imagePath = CCSUN.getChart(source.id, day)
-                await app.sendGroupMessage(ccsunGroup, [Image.fromFileSystem(imagePath)])
-                os.remove(imagePath)
+                    await mirai_app.sendGroupMessage(ccsun_group, info)
+                image_path = CCSUN.getChart(source.id, day)
+                await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
+                os.remove(image_path)
                 info = "发送图表"
             if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
                     if command[1].lower() == "update":
                         info = await updateBandwidth()
             write_log(info, 0)
+
 
 if __name__ == "__main__":
     app.run()

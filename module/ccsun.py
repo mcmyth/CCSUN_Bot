@@ -117,7 +117,7 @@ CREATE TABLE "ccsun" (
         except Exception as e:
             return str(f'[refreshToken Error]\n{e}')
 
-    def getBandwidth(self):
+    def getBandwidthData(self):
         session = requests.session()
         url = f'https://{self.domain}/modules/servers/V2RaySocks/additional-features/flow-scriptable/flow-scriptable.php?sid={self.product}&token={self.token}'
         try:
@@ -134,33 +134,33 @@ CREATE TABLE "ccsun" (
         except Exception as e:
             return str(f'[getBandwidth Error]\n{e}')
 
-    def sendBandwidth(self, update=False):
+    def getBandwidthStr(self, update=False):
         try:
-            data = self.getBandwidth()
+            data = self.getBandwidthData()
             if data == {}:
                 raise Exception('获取数据失败')
             upload = gbUnitConverter(data['upload'], 'byte')
             download = gbUnitConverter(data['download'], 'byte')
             total = gbUnitConverter(data['total'], 'byte')
-            yesterdayDownload = self.config["yesterday"]["download"]
-            yesterdayUpload = self.config["yesterday"]["upload"]
-            usedDownload = round(download - yesterdayDownload, 2)
-            usedUpload = round(upload - yesterdayUpload, 2)
-            if update == True:
-                isUpdate = self.updateData(self.getYesterday(), usedUpload, usedDownload, upload, download)
+            yesterday_download = self.config["yesterday"]["download"]
+            yesterday_upload = self.config["yesterday"]["upload"]
+            used_download = round(float(download) - float(yesterday_download), 2)
+            used_upload = round(float(upload) - float(yesterday_upload), 2)
+            if update:
+                is_update = self.updateData(self.getYesterday(), used_upload, used_download, upload, download)
                 self.config["yesterday"]["download"] = download
                 self.config["yesterday"]["upload"] = upload
                 self.saveConfig()
-                info = f'[流量统计 {round(upload + download, 2)}GB / {round(total)}GB] {"" if isUpdate else "(数据库更新失败)"}\n' \
-                       f'昨日: ↑{str(usedUpload)}GB  ↓{str(usedDownload)}GB\n' \
+                info = f'[流量统计 {round(upload + download, 2)}GB / {round(total)}GB] {"" if is_update else "(数据库更新失败)"}\n' \
+                       f'昨日: ↑{str(used_upload)}GB  ↓{str(used_download)}GB\n' \
                        f'总计: ↑{str(upload)}GB  ↓{str(download)}GB'
             else:
                 info = f'[流量统计 {round(upload + download, 2)}GB / {round(total)}GB]\n' \
-                       f'当天: ↑{str(usedUpload)}GB  ↓{str(usedDownload)}GB\n' \
+                       f'当天: ↑{str(used_upload)}GB  ↓{str(used_download)}GB\n' \
                        f'总计: ↑{str(upload)}GB  ↓{str(download)}GB'
             return info
         except Exception as e:
-            return str(f'[sendBandwidth Error]\n{e}')
+            return str(f'[getBandwidthStr Error]\n{e}')
 
     def getSubscribe(self):
         session = requests.session()
@@ -205,11 +205,11 @@ CREATE TABLE "ccsun" (
         else:
             return False
 
-    def getChart(self, messageid, day="7"):
-        with os.popen(f'node module\js\ccsun.js {str(messageid)}.jpg {day}', 'r') as f:
+    def getChart(self, message_id, day="7"):
+        with os.popen(f'node module\js\ccsun.js {str(message_id)}.jpg {day}', 'r') as f:
             text = f.read()
-        print(text)  # 打印cmd输出结果
-        return "temp/" + str(messageid) + ".jpg"
+        print(text)  # 打印终端输出结果
+        return "temp/" + str(message_id) + ".jpg"
 
     def __init__(self, init=True):
         self.config = self.loadConfig()
