@@ -18,7 +18,7 @@ mirai_api_http_locate = configManager.config["user"]["httpapi"]
 app = Mirai(f"mirai://{mirai_api_http_locate}?authKey={authKey}&qq={qq}")
 
 ccsunGroup = configManager.config["ccsunGroup"]
-write_log("[Notice] CCSUN-Bot已启动")
+write_log("[Notice] CCSUN-Bot已启动", 3)
 
 # 旧方案,Timer 会突然停止运作
 # lock = False
@@ -47,10 +47,10 @@ write_log("[Notice] CCSUN-Bot已启动")
 async def auto_update():
     try:
         info = await updateBandwidth()
-        write_log("[↑]" + info)
+        write_log(info, 0)
     except Exception as e:
         print(e)
-        write_log(e)
+        write_log(e, 3)
 
 
 @scheduler.scheduled_job('cron',  hour='0', minute='0', second='0')
@@ -65,7 +65,9 @@ Thread(target=scheduler.start).start()
 async def updateBandwidth():
     info = CCSUN.sendBandwidth(True)
     if CCSUN.resetTotal():
-        await app.sendGroupMessage(ccsunGroup, '[Notice]\n月结日已重置流量')
+        notice = '[Notice]\n月结日已重置流量'
+        await app.sendGroupMessage(ccsunGroup, notice)
+        write_log(notice, 3)
     await app.sendGroupMessage(ccsunGroup, info)
     return info
 
@@ -81,7 +83,7 @@ async def run_command(type: str, data: dict):
         if group.id == ccsunGroup:
             info = ""
             cqMessage = CQEncoder.messageChainToCQ(message)
-            write_log(f"[↓][{member.id}]" + cqMessage)
+            write_log(f"[{member.id}]{cqMessage}", 1)
             command = commandDecode(cqMessage)
             if cqMessage == "登录":
                 CCSUN.Login()
@@ -117,7 +119,7 @@ async def run_command(type: str, data: dict):
                 if len(command) >= 1:
                     if command[1].lower() == "update":
                         info = await updateBandwidth()
-            write_log("[↑] " + info)
+            write_log(info, 0)
 
 if __name__ == "__main__":
     app.run()

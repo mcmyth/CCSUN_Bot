@@ -33,8 +33,14 @@ def commandDecode(command):
     return (c2)
 
 
-def write_log(log):
+def write_log(log, message_type=0):
+    # 0为发送消息,1为接收消息
+    _type = ""
+    if message_type == 0:
+        _type = "[↑] "
+    elif message_type == 1:
+        _type = "[↓] "
     if log != "":
         f = open("ccsun.log", 'a')
-        f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}] {log}\n")
+        f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}] {_type}{log}\n")
         f.close()
