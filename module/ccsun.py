@@ -198,8 +198,8 @@ CREATE TABLE "ccsun" (
     def resetTotal(self):
         day = time.strftime('%d', time.localtime(time.time()))
         if day == self.config["user"]["settlement_day"]:
-            self.config["yesterday"]["download"] = "0"
-            self.config["yesterday"]["upload"] = "0"
+            self.config["yesterday"]["download"] = 0
+            self.config["yesterday"]["upload"] = 0
             self.saveConfig()
             return True
         else:
