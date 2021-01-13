@@ -38,7 +38,7 @@
 
 `config/config.json`
 
-```JavaScript
+```json
 {
   "ccsunGroup": 1000, 
   "user": {
@@ -61,7 +61,7 @@
 
 `config/ccsun.json`
 
-```JavaScript
+```json
 {
   "login": {
     "password": "",
