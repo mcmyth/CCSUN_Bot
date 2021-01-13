@@ -5,7 +5,7 @@
 
 基于Mirai-Python / Nodejs实现
 
-它可以工作在 [ccsun.cc](https://ccsun.cc) 或 [z96w.win](https://z96w.win)
+它可以工作在 ~~[ccsun.cc](https://ccsun.cc)(暂不可用)~~ 或 [z96w.win](https://z96w.win)
 
 ## 主要功能
 
@@ -21,11 +21,14 @@
 ![](https://tu.yaohuo.me/imgs/2020/12/40faa0fafb110d99.png)
 
 ## 配置
-**注: 再此之前请先配置Python及Nodejs的运行环境并安装所需依赖**
+**注: 再此之前请先配置环境依赖**
+
+* 安装Python3及Nodejs
 * 安装Python依赖: 在项目路径下执行 ``pip install -r requirements.txt``
 * 安装Nodejs依赖: 在项目路径下执行 ``npm i``
+* 配置并正确运行mirai-core及*mirai*-http-api
 ****
-需正确配置下列信息
+需正确配置下列信息到指定文件
 
 ``ccsunGroup``填入需要机器人响应的QQ群
 
@@ -77,9 +80,7 @@
 
 ## 运行
 
-1. 配置并正确运行mirai-core及*mirai*-http-api
-2. requirements.txt 是所需第三方模块，在项目坐在目录cmd中执行 `pip install -r requirements.txt` 安装模块  
-3. 在项目所在目录 cmd 中执行``python main.py ``
+在项目所在目录 cmd 中执行``python main.py ``
 
 ## 指令
 
