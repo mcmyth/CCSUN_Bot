@@ -132,13 +132,13 @@ CREATE TABLE "ccsun" (
                 config[key] = round(Decimal(value))
             return config
         except Exception as e:
-            return str(f'[getBandwidth Error]\n{e}')
+            return str(f'[getBandwidthData Error]\n{e}')
 
     def getBandwidthStr(self, update=False):
         try:
             data = self.getBandwidthData()
             if data == {}:
-                raise Exception('获取数据失败')
+                raise Exception('[getBandwidthStr Error] 获取流量数据失败')
             upload = gbUnitConverter(data['upload'], 'byte')
             download = gbUnitConverter(data['download'], 'byte')
             total = gbUnitConverter(data['total'], 'byte')
@@ -187,7 +187,7 @@ CREATE TABLE "ccsun" (
                 # subscribe_link[i]["link"] = value
                 # subscribe_link[i]["client"] = type
 
-                info += f'{client}:{value}+\n'
+                info += f'{client}:{value}\n'
                 i += 1
             info = info[:-1]
             return info
