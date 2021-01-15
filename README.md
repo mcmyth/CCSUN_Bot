@@ -9,23 +9,21 @@
 
 ## 主要功能
 
-* 用于每天0点自动推送CCSUN流量详情
+* 每天0点自动推送昨天流量详情
 * 获取订阅链接
-
 * 查询流量
-
 * 支持查询过去180天流量数据生成图表
 
-![](https://tu.yaohuo.me/imgs/2020/12/b123f596fe8b18e6.jpg)
+![示例](https://tu.yaohuo.me/imgs/2020/12/b123f596fe8b18e6.jpg)
 
-![](https://tu.yaohuo.me/imgs/2020/12/40faa0fafb110d99.png)
+![图表](https://tu.yaohuo.me/imgs/2020/12/40faa0fafb110d99.png)
 
 ## 配置
 **注: 再此之前请先配置环境依赖**
 
 * 安装Python3及Nodejs
-* 安装Python依赖: 在项目路径下执行 ``pip install -r requirements.txt``
-* 安装Nodejs依赖: 在项目路径下执行 ``npm i``
+* 安装Python依赖: 在项目所在目录中执行命令 ``pip install -r requirements.txt``
+* 安装Nodejs依赖: 在项目所在目录中执行命令 ``npm i``
 * 配置并正确运行mirai-core及*mirai*-http-api
 ****
 需正确配置下列信息到指定文件
@@ -80,7 +78,7 @@
 
 ## 运行
 
-在项目所在目录 cmd 中执行``python main.py ``
+在项目所在目录中执行命令``python main.py ``
 
 ## 指令
 
