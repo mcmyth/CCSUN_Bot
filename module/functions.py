@@ -1,6 +1,7 @@
 import re
 import time
-
+import calendar
+import datetime
 
 def is_number(s):
     try:
@@ -44,3 +45,10 @@ def write_log(log, message_type=0):
         f = open("ccsun.log", 'a')
         f.write(f"[{time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(time.time()))}] {_type}{log}\n")
         f.close()
+
+
+def days_before_month():
+    today = datetime.date.today()
+    last_month = today - datetime.timedelta(weeks=4)
+    __days_before_month = calendar.monthrange(last_month.year, last_month.month)[1]
+    return __days_before_month

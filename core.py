@@ -65,11 +65,13 @@ Thread(target=scheduler.start).start()
 # 更新流量
 async def updateBandwidth():
     info = CCSUN.getBandwidthStr(True)
-    if CCSUN.resetTotal():
-        notice = '[Notice]\n月结日已重置流量'
-        await app.sendGroupMessage(ccsun_group, notice)
-        write_log(notice, 3)
     await app.sendGroupMessage(ccsun_group, info)
+    if CCSUN.resetTotal():
+        notice = '[Notice]\n今天是月结日,已重置流量。\n上月流量使用情况:\n'
+        image_path = CCSUN.getChart("reset", str(days_before_month()))
+        await app.sendGroupMessage(ccsun_group,  [Plain(notice), Image.fromFileSystem(image_path)])
+        os.remove(image_path)
+        write_log(notice + "[图表]", 3)
     return info
 
 
@@ -118,7 +120,7 @@ async def run_command(message_type: str, data: dict):
                 image_path = CCSUN.getChart(source.id, day)
                 await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
                 os.remove(image_path)
-                info = "发送图表"
+                info = "[图表]"
             if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
                     if command[1].lower() == "update":
