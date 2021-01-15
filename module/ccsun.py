@@ -13,7 +13,7 @@ from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 
-def gbUnitConverter(number, unit):
+def gbUnitConverter(number: float, unit: str):
     unit = unit.lower()
     decimal = 2
     if unit == 'mb':
@@ -65,7 +65,7 @@ CREATE TABLE "ccsun" (
         conn.close()
         print('[Notice] New database created')
 
-    def updateData(self, date, upload, download, uploaded, downloaded):
+    def updateData(self, date: datetime, upload: float, download: float, uploaded: float, downloaded: float):
         conn = sqlite3.connect(f'{self.configPath}data.db')
         cur = conn.cursor()
         cur.execute('insert into `ccsun`(`date`, `upload`, `download`, `uploaded`, `downloaded`) VALUES(?,?,?,?,?)',
@@ -134,7 +134,7 @@ CREATE TABLE "ccsun" (
         except Exception as e:
             return str(f'[getBandwidthData Error]\n{e}')
 
-    def getBandwidthStr(self, update=False):
+    def getBandwidthStr(self, update: bool = False):
         try:
             data = self.getBandwidthData()
             if data == {}:
@@ -205,13 +205,13 @@ CREATE TABLE "ccsun" (
         else:
             return False
 
-    def getChart(self, message_id, day="7"):
-        with os.popen(f'node module\js\ccsun.js {str(message_id)}.jpg {day}', 'r') as f:
+    def getChart(self, filename: str, day: str = "7"):
+        with os.popen(f'node module\js\ccsun.js {str(filename)}.jpg {day}', 'r') as f:
             text = f.read()
         print(text)  # 打印终端输出结果
-        return "temp/" + str(message_id) + ".jpg"
+        return "temp/" + filename + ".jpg"
 
-    def __init__(self, init=True):
+    def __init__(self, init: bool = True):
         self.config = self.loadConfig()
         self.product = self.config["user"]["product"]
         self.token = self.config["token"]

@@ -117,7 +117,7 @@ async def run_command(message_type: str, data: dict):
                     day = "180"
                     info = "[Notice]\n最大查询过去180天的数据"
                     await mirai_app.sendGroupMessage(ccsun_group, info)
-                image_path = CCSUN.getChart(source.id, day)
+                image_path = CCSUN.getChart(str(source.id), day)
                 await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
                 os.remove(image_path)
                 info = "[图表]"
