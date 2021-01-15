@@ -138,7 +138,7 @@ CREATE TABLE "ccsun" (
         try:
             data = self.getBandwidthData()
             if data == {}:
-                raise Exception('[getBandwidthStr Error] 获取流量数据失败')
+                raise Exception('获取流量数据失败')
             upload = gbUnitConverter(data['upload'], 'byte')
             download = gbUnitConverter(data['download'], 'byte')
             total = gbUnitConverter(data['total'], 'byte')
