@@ -1,7 +1,6 @@
 from core import *
+from web.index import run_server
 
-# Chart Server
-os.popen(f'start python web/index.py', 'r')
 
 @app.receiver("GroupMessage")
 async def event_gm(app: Mirai, message: MessageChain, group: Group, member: Member,source: Source):
@@ -14,4 +13,7 @@ async def event_gm(app: Mirai, message: MessageChain, group: Group, member: Memb
     })
 
 if __name__ == "__main__":
+    # Chart Server
+    Thread(target=run_server).start()
+    # Mirai-Python app
     app.run()

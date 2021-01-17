@@ -65,10 +65,13 @@ def net_is_used(port, ip='127.0.0.1'):
         print('%s:%d is used' % (ip, port))
         return True
     except:
-        print('%s:%d is unused' % (ip, port))
+        # print('%s:%d is unused' % (ip, port))
         return False
 
 
-port = 8881
-if not net_is_used(port):
-    webApp.run(debug=True, port=port)
+def run_server():
+    port = 8881
+    if not net_is_used(port):
+        webApp.run(debug=True, use_reloader=False, port=port, threaded=True)
+    else:
+        print(f"{port}端口已被占用")
