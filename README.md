@@ -7,6 +7,8 @@
 
 它可以工作在 ~~[ccsun.cc](https://ccsun.cc)(暂不可用)~~ 或 [z96w.win](https://z96w.win)
 
+需使用系统端口`8881`和`55004`,请留意端口是否已被占用
+
 ## 主要功能
 
 * 每天0点自动推送昨天流量详情
@@ -24,7 +26,8 @@
 * 安装Python3及Nodejs
 * 安装Python依赖: 在项目所在目录中执行命令 ``pip install -r requirements.txt``
 * 安装Nodejs依赖: 在项目所在目录中执行命令 ``npm i``
-* 配置并正确运行mirai-core及*mirai*-http-api
+* 配置并正确运行Mirai服务端 (推荐使用 [Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader))
+* 安装[mirai-api-http](https://github.com/project-mirai/mirai-api-http)插件并在`setting.yml`中配置端口为`55004`
 ****
 需正确配置下列信息到指定文件
 
@@ -84,5 +87,5 @@
 
 1. 流量  **\* 查询当天和总计使用流量**
 2. 订阅  **\* 获取订阅链接**
-3. 图表 或 图表[天数]  **\*例: 图表15**
+3. 图表 或 图表[天数]  **\*渲染指定天数的图表(不填数字默认为7天)  例: 图表15**
 4. /ccsun update  **\* 强制提交当天流量到数据库和配置文件**
