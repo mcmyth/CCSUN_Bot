@@ -5,9 +5,11 @@
 
 基于Mirai-Python / Nodejs实现
 
-它可以工作在 ~~[ccsun.cc](https://ccsun.cc)(暂不可用)~~ 或 [z96w.win](https://z96w.win)
+> [Mirai是什么?](https://github.com/mamoe/mirai/blob/dev/README.md)
 
-需使用系统端口`8881`和`55004`,请留意端口是否已被占用
+CCSUN Bot可以工作在 ~~[ccsun.cc](https://ccsun.cc)(暂不可用)~~ 或 [z96w.win](https://z96w.win)
+
+\* 需使用系统端口`8881`(用于Flask服务端)和`55004`(用于连接mirai-api-http),请留意端口是否已被占用
 
 ## 主要功能
 
@@ -27,13 +29,17 @@
 * 安装Python依赖: 在项目所在目录中执行命令 ``pip install -r requirements.txt``
 * 安装Nodejs依赖: 在项目所在目录中执行命令 ``npm i``
 * 配置并正确运行Mirai服务端 (推荐使用 [Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader))
-* 安装[mirai-api-http](https://github.com/project-mirai/mirai-api-http)插件并在`setting.yml`中配置端口为`55004`
+* 安装[mirai-api-http](https://github.com/project-mirai/mirai-api-http)插件
+  * 在`setting.yml`中配置端口为`55004` (此处对应配置文件`config/config.json`中的`httpapi`,可自定义)
+  * 在`setting.yml`中配置`authKey`密钥
 ****
 需正确配置下列信息到指定文件
 
 ``ccsunGroup``填入需要机器人响应的QQ群
 
-``authKey``和``httpapi``填入*mirai*-http-api的密钥和地址
+``authKey``填入*mirai*-http-api的密钥
+
+ ``httpapi``填入*mirai*-http-api的地址
 
 ``qq``填入Mirai登录的QQ号码
 
@@ -44,7 +50,7 @@
   "ccsunGroup": 1000, 
   "user": {
     "authKey": "xxx",
-    "httpapi": "xxx",
+    "httpapi": "localhost:55004/ws",
     "qq": 1000
   }
 }
@@ -81,7 +87,8 @@
 
 ## 运行
 
-在项目所在目录中执行命令``python main.py ``
+* 确保Mirai及mirai-api-http配置正确并已运行
+* 在项目所在目录中执行命令``python main.py ``
 
 ## 指令
 
