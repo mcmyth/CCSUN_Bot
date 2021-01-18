@@ -21,30 +21,6 @@ ccsun_group = configManager.config["ccsunGroup"]
 write_log("[Notice] CCSUN-Bot已启动", 3)
 
 
-# 旧方案,Timer 会突然停止运作
-# lock = False
-# async def auto_update():
-#     global lock
-#     trigger_time = "00:00"
-#     timeNow = time.strftime('%H:%M', time.localtime(time.time()))
-#
-#     # Log
-#     write_log(f"{timeNow} | Lock = {str(lock)}")
-#
-#     if timeNow == trigger_time and lock == False:
-#         lock = True
-#         try:
-#             info = await updateBandwidth()
-#             write_log("[↑]" + info)
-#         except Exception as e:
-#             print(e)
-#             write_log(e)
-#     if timeNow != trigger_time and lock == True:
-#         lock = False
-# from module.timer import RepeatingTimer
-# RepeatingTimer(3, auto_update).start()
-
-
 async def auto_update():
     try:
         info = await updateBandwidth()

@@ -72,6 +72,6 @@ def net_is_used(port, ip='127.0.0.1'):
 def run_server():
     port = 8881
     if not net_is_used(port):
-        webApp.run(debug=True, use_reloader=False, port=port, threaded=True)
+        webApp.run(debug=False, use_reloader=False, port=port, threaded=True)
     else:
-        print(f"{port}端口已被占用")
+        print(f"Flask服务端启动失败,{port}端口已被占用")
