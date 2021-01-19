@@ -206,10 +206,11 @@ CREATE TABLE "ccsun" (
             return False
 
     def getChart(self, filename: str, day: str = "7"):
-        with os.popen(f'node module\js\ccsun.js {str(filename)}.jpg {day}', 'r') as f:
+        with os.popen(f'node module/js/ccsun.js {str(filename)}.jpg {day}', 'r') as f:
             text = f.read()
-        print(text)  # 打印终端输出结果
-        return "temp/" + filename + ".jpg"
+            if text != "":
+                print(text)  # 查错用,打印终端输出结果
+        return "./temp/" + filename + ".jpg"
 
     def __init__(self, init: bool = True):
         self.config = self.loadConfig()
