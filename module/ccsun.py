@@ -29,7 +29,6 @@ def gbUnitConverter(number: float, unit: str):
 class CCSUN:
     token: str
     product: str
-    token: str
     domain: str
     configPath: str
     config: str
@@ -110,10 +109,10 @@ CREATE TABLE "ccsun" (
             soup = BeautifulSoup(html, "lxml")
             link = soup.select(".add-renew-notice")[0]['href']
             params = parse.parse_qs(parse.urlparse(link).query)
-            token = params['token'][0]
-            self.config["token"] = token
+            self.token = params['token'][0]
+            self.config["token"] = self.token
             self.saveConfig()
-            return token
+            return self.token
         except Exception as e:
             return str(f'[refreshToken Error]\n{e}')
 
