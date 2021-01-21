@@ -153,13 +153,13 @@ CREATE TABLE "ccsun" (
                 info = f'[流量统计 {round(upload + download, 2)}GB / {round(total)}GB] {"" if is_update else "(数据库更新失败)"}\n' \
                        f'昨日: ↑{str(used_upload)}GB  ↓{str(used_download)}GB\n' \
                        f'总计: ↑{str(upload)}GB  ↓{str(download)}GB\n' \
-                       f'------\n' \
-                       f'剩余: {round(total - (upload + download), 2)}GB'
+                       f'---------------\n' \
+                       f'剩余流量: {round(total - (upload + download), 2)}GB'
             else:
                 info = f'[流量统计 {round(upload + download, 2)}GB / {round(total)}GB]\n' \
                        f'当天: ↑{str(used_upload)}GB  ↓{str(used_download)}GB\n' \
                        f'总计: ↑{str(upload)}GB  ↓{str(download)}GB\n' \
-                       f'------------\n' \
+                       f'---------------\n' \
                        f'剩余流量: {round(total - (upload + download), 2)}GB'
             return info
         except Exception as e:
