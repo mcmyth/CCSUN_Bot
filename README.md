@@ -28,7 +28,7 @@ CCSUN Bot可以工作在 ~~[ccsun.cc](https://ccsun.cc)(暂不可用)~~ 或 [z96
 * 安装Python3及Nodejs
 * 安装Python依赖: 在项目所在目录中执行命令 ``pip install -r requirements.txt``
 * 安装Nodejs依赖: 在项目所在目录中执行命令 ``npm i``
-* 配置并正确运行Mirai服务端 (推荐使用 [Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader))
+* 配置并正确运行Mirai服务端 (推荐使用 ~~[Mirai Console Loader](https://github.com/iTXTech/mirai-console-loader) 发图有问题~~  mirai-console-wrapper 1.3)
 * 安装[mirai-api-http](https://github.com/project-mirai/mirai-api-http)插件
   * 在`setting.yml`中配置端口为`55004` (此处对应配置文件`config/config.json`中的`httpapi`,可自定义)
   * 在`setting.yml`中配置`authKey`密钥
@@ -87,8 +87,9 @@ CCSUN Bot可以工作在 ~~[ccsun.cc](https://ccsun.cc)(暂不可用)~~ 或 [z96
 
 ## 运行
 
+* 正确安装Python3.8/NodeJS以及所有依赖
 * 确保Mirai及mirai-api-http配置正确并已运行
-* 在项目所在目录中执行命令``python main.py ``
+* 在项目所在目录中执行命令``ccsun-bot ``
 
 ## 指令
 
