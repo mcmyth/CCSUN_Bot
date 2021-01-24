@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+export PYTHON_BINARY=python3.8
+$PYTHON_BINARY main.py $*
