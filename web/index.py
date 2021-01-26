@@ -36,11 +36,11 @@ def _ccsunAPI():
             downloaded = x[5]
             jsonObj["data"].append({
                 "date": date,
-                "upload": upload,
-                "download": download,
+                "upload": float(upload),
+                "download": float(download),
                 "used": {
-                    "upload": uploaded,
-                    "download": downloaded
+                    "upload": float(uploaded),
+                    "download": float(downloaded)
                 }
             })
     else:
