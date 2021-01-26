@@ -13,17 +13,16 @@ $(function () {
 function loaded(json_src) {
     const plotOptions = {
         line: {
+            animation: false,
             dataLabels: {
                 enabled: true
-            },
-            series: {
-                animation: false
             }
         }
     }
     const chart1 = Highcharts.chart('container', {
         chart: {
-            type: 'line'
+            type: 'line',
+            animation: false
         },
         credits: {enabled: false},
         title: {
@@ -67,7 +66,8 @@ function loaded(json_src) {
 
     const chart2 = Highcharts.chart('container2', {
         chart: {
-            type: 'line'
+            type: 'line',
+             animation: false
         },
         credits: {enabled: false},
         title: {

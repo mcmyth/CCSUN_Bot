@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const filename = "temp/" + process.argv[2];
+const filename = "./temp/" + process.argv[2];
 let day = +process.argv[3];
 
 const port = '8881'
@@ -33,9 +33,11 @@ if (day > 180) { day = 180 }
     if (w < 500) w = 500;
 
     await page.setViewport({width: Math.round(w), height: Math.round(doc.height)});
+        await page.waitForSelector("#container .highcharts-container").then(async () => {
+            await page.waitForSelector("#container2 .highcharts-container").then(async () => {
+            await page.screenshot({path: filename, quality: 76});
+            await browser.close();
+        })
+    })
 
-    await setTimeout(async () => {
-        await page.screenshot({path: filename, quality: 76});
-        await browser.close();
-    }, 2000)
 })();
