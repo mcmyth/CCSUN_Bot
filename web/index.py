@@ -50,6 +50,7 @@ def _ccsunAPI():
             if args["offline"].lower() == "true":
                 offline = True
         if not offline:
+            CCSUN.loadConfig()
             data = CCSUN.getBandwidthData()
             if data == {}:
                 CCSUN.Login()
