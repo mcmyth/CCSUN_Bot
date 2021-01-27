@@ -1,11 +1,12 @@
-import sqlite3, sys, socket, json
-sys.path.append('..')
+import sqlite3, sys, socket, json, datetime
+from module.ccsun import CCSUN, gbUnitConverter
 from flask import Flask, request, render_template, url_for
 from flask_cors import *
 
+sys.path.append('..')
 webApp = Flask(__name__)
 CORS(webApp, resources=r'/*')
-
+CCSUN = CCSUN(False)
 
 @webApp.route('/api/ccsun')
 def _ccsunAPI():
@@ -43,6 +44,40 @@ def _ccsunAPI():
                     "download": float(downloaded)
                 }
             })
+
+        offline = False
+        if 'offline' in args:
+            if args["offline"].lower() == "true":
+                offline = True
+        if not offline:
+            data = CCSUN.getBandwidthData()
+            if data == {}:
+                CCSUN.Login()
+                CCSUN.refreshToken()
+                data = CCSUN.getBandwidthData()
+
+            if not isinstance(data, dict):
+                print(data)
+                data = {}
+
+            if data != {}:
+                upload = gbUnitConverter(data['upload'], 'byte')
+                download = gbUnitConverter(data['download'], 'byte')
+                yesterday_download = CCSUN.config["yesterday"]["download"]
+                yesterday_upload = CCSUN.config["yesterday"]["upload"]
+                used_download = round(float(download) - float(yesterday_download), 2)
+                used_upload = round(float(upload) - float(yesterday_upload), 2)
+                jsonObj["data"].append({
+                    "date": str(datetime.date.today()),
+                    "upload": used_upload,
+                    "download": used_download,
+                    "used": {
+                        "upload": upload,
+                        "download": download
+                    }
+                })
+            else:
+                jsonObj["status"] = "data_acquisition_failed"
     else:
         jsonObj["status"] = "void"
 

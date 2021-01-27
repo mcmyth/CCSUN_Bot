@@ -3,7 +3,7 @@ $(function () {
     $.ajax({
         type: "GET",
         contentType: "application/json;charset=UTF-8",
-        url: `http://127.0.0.1:${port}/api/ccsun?day=${GetQueryString("day")}`,
+        url: `http://127.0.0.1:${port}/api/ccsun${window.location.search}`,
         success: function (result) {
             loaded(JSON.parse(result));
         }
@@ -11,6 +11,10 @@ $(function () {
 });
 
 function loaded(json_src) {
+    let notice = ''
+    if(json_src["status"] === "data_acquisition_failed") {
+        notice = "获取实时流量数据失败"
+    }
     const plotOptions = {
         line: {
             animation: false,
@@ -29,7 +33,7 @@ function loaded(json_src) {
             text: '当日流量'
         },
         subtitle: {
-            text: ''
+            text: notice
         },
         xAxis: {},
         yAxis: {
@@ -74,7 +78,7 @@ function loaded(json_src) {
             text: '总计流量'
         },
         subtitle: {
-            text: ''
+            text: notice
         },
         xAxis: {},
         yAxis: {
@@ -109,6 +113,7 @@ function loaded(json_src) {
     });
 }
 
+/*
 function GetQueryString(name) {
     let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
     let r = window.location.search.substr(1).match(reg); //获取url中"?"符后的字符串并正则匹配
@@ -118,4 +123,4 @@ function GetQueryString(name) {
     reg = null;
     r = null;
     return context == null || context == "" || context == "undefined" ? "" : context;
-}
+}*/

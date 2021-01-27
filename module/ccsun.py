@@ -208,8 +208,8 @@ CREATE TABLE "ccsun" (
         else:
             return False
 
-    def getChart(self, filename: str, day: str = "7"):
-        with os.popen(f'node module/js/ccsun.js {str(filename)}.jpg {day}', 'r') as f:
+    def getChart(self, filename: str, day: str = "7", online: bool = True):
+        with os.popen(f'node module/js/ccsun.js {str(filename)}.jpg {day} {"online" if online else "offline"}', 'r') as f:
             text = f.read()
             if text != "":
                 print(text)  # 查错用,打印终端输出结果

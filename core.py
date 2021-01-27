@@ -44,7 +44,7 @@ async def updateBandwidth():
     await app.sendGroupMessage(ccsun_group, info)
     if CCSUN.resetTotal():
         notice = '[Notice]\n今天是月结日,已重置流量。\n上月流量使用情况:\n'
-        image_path = CCSUN.getChart("reset", str(days_before_month()))
+        image_path = CCSUN.getChart("reset", str(days_before_month()), False)
         await app.sendGroupMessage(ccsun_group,  [Plain(notice), Image.fromFileSystem(image_path)])
         os.remove(image_path)
         write_log(notice + "[图表]", 3)
@@ -83,17 +83,19 @@ async def run_command(message_type: str, data: dict):
                     if info == '':
                         info = '[getSubscribe Error]\n获取数据失败'
                 await mirai_app.sendGroupMessage(ccsun_group, info)
-            if cq_message[:2] == "图表":
+            if cq_message[:2] == "图表" or cq_message[:4] == "离线图表":
+                is_offline = True if cq_message[:2] == "图表" else False
+                keyword_len = 2 if cq_message[:2] == "图表" else 4
                 day = ""
-                if len(cq_message) >= 2:
-                    day = cq_message[2:]
+                if len(cq_message) >= keyword_len:
+                    day = cq_message[keyword_len:]
                     if not is_number(day):
                         day = "7"
                 if int(day) > 180:
                     day = "180"
                     info = "[Notice]\n最大查询过去180天的数据"
                     await mirai_app.sendGroupMessage(ccsun_group, info)
-                image_path = CCSUN.getChart(str(source.id), day)
+                image_path = CCSUN.getChart(str(source.id), day, is_offline)
                 await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
                 os.remove(image_path)
                 info = "[图表]"
