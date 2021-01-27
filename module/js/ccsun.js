@@ -1,18 +1,19 @@
+
+if(process.argv.length <= 3) {
+    console.log('Missing parameters.The parameter is "<filename.jpg> <day> [offline|online]"')
+    return
+}
+
 const puppeteer = require('puppeteer');
 const fs = require('fs');
 const filename = "./temp/" + process.argv[2];
-let day = +process.argv[3];
+let day = process.argv[3];
+let offline = process.argv[4];
 
 const port = '8881'
-const url = `http://127.0.0.1:${port}/chart?day=${day}`;
-
-if (!fs.existsSync('./temp/')) {
-    fs.mkdirSync('./temp/')
-}
-
-if (day > 180) {
-    day = 180
-}
+if (day > 180) day = 180;
+const url = `http://127.0.0.1:${port}/chart?day=${day}&offline=${String((offline === "offline"))}`;
+if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
 
 (async () => {
     const browser = await puppeteer.launch({
@@ -31,9 +32,9 @@ if (day > 180) {
         return {x, y, width, height};
     }, header);
 
-    w = day * 35
-    if (w < 500) w = 500;
-    await page.setViewport({width: Math.round(w), height: Math.round(doc.height)});
+    let pageWidth = day * 35
+    if (pageWidth < 500) pageWidth = 500;
+    await page.setViewport({width: Math.round(pageWidth), height: Math.round(doc.height)});
 
     await page.waitForSelector("#container .highcharts-container").then(async () => {
         await page.waitForSelector("#container2 .highcharts-container").then(async () => {
