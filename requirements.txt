@@ -1,4 +1,4 @@
-kuriyama==0.3.6
+kuriyama-lxnet==1.1
 Flask_Cors==3.0.9
 requests==2.24.0
 Flask==1.1.2
