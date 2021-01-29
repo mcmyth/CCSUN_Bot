@@ -40,9 +40,10 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
         await page.waitForSelector('#container2 .highcharts-container').then(async () => {
             await page.screenshot({path: filename, quality: 76});
         })
-    }).catch(reject => {
+    }).catch(async reject => {
         console.log('[Error waitForSelector]')
         console.log(reject)
+        await browser.close();
     })
     await browser.close();
 })();
