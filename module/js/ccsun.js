@@ -6,13 +6,13 @@ if(process.argv.length <= 3) {
 
 const puppeteer = require('puppeteer');
 const fs = require('fs');
-const filename = "./temp/" + process.argv[2];
+const filename = './temp/' + process.argv[2];
 let day = process.argv[3];
 let offline = process.argv[4];
 
 const port = '8881'
 if (day > 180) day = 180;
-const url = `http://127.0.0.1:${port}/chart?day=${day}&offline=${String((offline === "offline"))}`;
+const url = `http://127.0.0.1:${port}/chart?day=${day}&offline=${String((offline === 'offline'))}`;
 if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
 
 (async () => {
@@ -21,7 +21,7 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
     });
     const page = await browser.newPage();
     try {
-        await page.goto(url, {"waitUntil": "networkidle2"});
+        await page.goto(url, {'waitUntil': 'networkidle2'});
     } catch (err) {
         await browser.close();
     }
@@ -36,10 +36,9 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
     if (pageWidth < 500) pageWidth = 500;
     await page.setViewport({width: Math.round(pageWidth), height: Math.round(doc.height)});
 
-    await page.waitForSelector("#container .highcharts-container").then(async () => {
-        await page.waitForSelector("#container2 .highcharts-container").then(async () => {
+    await page.waitForSelector('#container .highcharts-container').then(async () => {
+        await page.waitForSelector('#container2 .highcharts-container').then(async () => {
             await page.screenshot({path: filename, quality: 76});
-            await browser.close();
         })
     })
 
