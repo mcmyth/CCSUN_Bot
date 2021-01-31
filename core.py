@@ -96,9 +96,15 @@ async def run_command(message_type: str, data: dict):
                     info = "[Notice]\n最大查询过去180天的数据"
                     await mirai_app.sendGroupMessage(ccsun_group, info)
                 image_path = CCSUN.getChart(str(source.id), day, is_offline)
-                await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
-                os.remove(image_path)
-                info = "[图表]"
+                if image_path == '':
+                    image_path = CCSUN.getChart(str(source.id), day, is_offline)
+                if image_path != '':
+                    await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
+                    os.remove(image_path)
+                    info = "[图表]"
+                else:
+                    info = "[getChart Error] 获取图表失败"
+                    await mirai_app.sendGroupMessage(ccsun_group, [Image.fromFileSystem(image_path)])
             if command[0].lower() == "/ccsun":
                 if len(command) >= 1:
                     if command[1].lower() == "update":

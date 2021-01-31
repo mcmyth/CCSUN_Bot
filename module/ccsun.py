@@ -120,7 +120,7 @@ CREATE TABLE "ccsun" (
         session = requests.session()
         url = f'https://{self.domain}/modules/servers/V2RaySocks/additional-features/flow-scriptable/flow-scriptable.php?sid={self.product}&token={self.token}'
         try:
-            res = session.get(url, headers=self.headers, verify=False, allow_redirects=False)
+            res = session.get(url, headers=self.headers, verify=False, timeout=5)
             source = res.content.decode('utf-8')
             source = source.replace(' ', '').replace('Subscription-Userinfo:', '').split(';')
             source.pop()
@@ -213,7 +213,11 @@ CREATE TABLE "ccsun" (
             text = f.read()
             if text != "":
                 print(text)  # 查错用,打印终端输出结果
-        return "./temp/" + filename + ".jpg"
+        filename = "./temp/" + filename + ".jpg"
+        if os.path.exists(filename):
+            return filename
+        else:
+            return ''
 
     def __init__(self, init: bool = True):
         self.config = self.loadConfig()

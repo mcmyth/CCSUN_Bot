@@ -35,9 +35,11 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
     let pageWidth = day * 35
     if (pageWidth < 500) pageWidth = 500;
     await page.setViewport({width: Math.round(pageWidth), height: Math.round(doc.height)});
-
-    await page.waitForSelector('#container .highcharts-container').then(async () => {
-        await page.waitForSelector('#container2 .highcharts-container').then(async () => {
+    const waitForSelectorOptions = {
+        timeout: 6000
+    }
+    await page.waitForSelector('#container .highcharts-container', waitForSelectorOptions).then(async () => {
+        await page.waitForSelector('#container2 .highcharts-container', waitForSelectorOptions).then(async () => {
             await page.screenshot({path: filename, quality: 76});
         })
     }).catch(async reject => {
