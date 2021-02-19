@@ -36,7 +36,7 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
     if (pageWidth < 500) pageWidth = 500;
     await page.setViewport({width: Math.round(pageWidth), height: Math.round(doc.height)});
     const waitForSelectorOptions = {
-        timeout: 6000
+        timeout: 1600
     }
     await page.waitForSelector('#container .highcharts-container', waitForSelectorOptions).then(async () => {
         await page.waitForSelector('#container2 .highcharts-container', waitForSelectorOptions).then(async () => {

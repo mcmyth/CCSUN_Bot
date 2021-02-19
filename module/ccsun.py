@@ -120,17 +120,19 @@ CREATE TABLE "ccsun" (
         session = requests.session()
         url = f'https://{self.domain}/modules/servers/V2RaySocks/additional-features/flow-scriptable/flow-scriptable.php?sid={self.product}&token={self.token}'
         try:
-            res = session.get(url, headers=self.headers, verify=False, timeout=5)
+            res = session.get(url, headers=self.headers, verify=False, timeout=1500)
             source = res.content.decode('utf-8')
             source = source.replace(' ', '').replace('Subscription-Userinfo:', '').split(';')
             source.pop()
             config = {}
+            print(f'[getBandwidthData] { source }')
             for item in source:
                 key = item.split('=')[0]
                 value = item.split('=')[1]
                 config[key] = round(Decimal(value))
             return config
         except Exception as e:
+            print(e)
             return str(f'[getBandwidthData Error]\n{e}')
 
     def getBandwidthStr(self, update: bool = False):
