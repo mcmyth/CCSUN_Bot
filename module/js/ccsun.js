@@ -1,7 +1,6 @@
-
-if(process.argv.length <= 3) {
-    console.log('Missing parameters.The parameter is "<filename.jpg> <day> [offline|online]"')
-    return
+if (process.argv.length <= 3) {
+  console.log('Missing parameters.The parameter is "<filename.jpg> <day> [offline|online]"')
+  return
 }
 
 const puppeteer = require('puppeteer');
@@ -16,38 +15,38 @@ const url = `http://127.0.0.1:${port}/chart?day=${day}&offline=${String((offline
 if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
 
 (async () => {
-    const browser = await puppeteer.launch({
-        headless: true,
-    });
-    const page = await browser.newPage();
-    try {
-        await page.goto(url, {'waitUntil': 'networkidle2'});
-    } catch (err) {
-        await browser.close();
-    }
-    const header = await page.$('html');
+  const browser = await puppeteer.launch({
+    headless: true,
+  });
+  const page = await browser.newPage();
+  try {
+    await page.goto(url, {'waitUntil': 'networkidle2'});
+  } catch (err) {
+    await browser.close();
+  }
+  const header = await page.$('html');
 
-    const doc = await page.evaluate((header) => {
-        const {x, y, width, height} = header.getBoundingClientRect();
-        return {x, y, width, height};
-    }, header);
+  const doc = await page.evaluate((header) => {
+    const {x, y, width, height} = header.getBoundingClientRect();
+    return {x, y, width, height};
+  }, header);
 
-    let pageWidth = day * 35
-    if (pageWidth < 500) pageWidth = 500;
-    await page.setViewport({width: Math.round(pageWidth), height: Math.round(doc.height)});
-    const waitForSelectorOptions = {
-        timeout: 1600
-    }
-    await setTimeout(async () => {
-        await page.waitForSelector('#container .highcharts-container', waitForSelectorOptions).then(async () => {
-        await page.waitForSelector('#container2 .highcharts-container', waitForSelectorOptions).then(async () => {
-            await page.screenshot({path: filename, quality: 76})
-        })
+  let pageWidth = day * 35
+  if (pageWidth < 500) pageWidth = 500;
+  await page.setViewport({width: Math.round(pageWidth), height: Math.round(doc.height)});
+  const waitForSelectorOptions = {
+    timeout: 1600
+  }
+  await setTimeout(async () => {
+    await page.waitForSelector('#container .highcharts-container', waitForSelectorOptions).then(async () => {
+      await page.waitForSelector('#container2 .highcharts-container', waitForSelectorOptions).then(async () => {
+        await page.screenshot({path: filename, quality: 76})
+      })
     }).catch(async reject => {
-        console.log('[Error waitForSelector]')
-        console.log(reject)
-        await browser.close();
+      console.log('[Error waitForSelector]')
+      console.log(reject)
+      await browser.close();
     })
     await browser.close();
-    }, 600)
+  }, 600)
 })();
