@@ -38,9 +38,10 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
     const waitForSelectorOptions = {
         timeout: 1600
     }
-    await page.waitForSelector('#container .highcharts-container', waitForSelectorOptions).then(async () => {
+    await setTimeout(async () => {
+        await page.waitForSelector('#container .highcharts-container', waitForSelectorOptions).then(async () => {
         await page.waitForSelector('#container2 .highcharts-container', waitForSelectorOptions).then(async () => {
-            await page.screenshot({path: filename, quality: 76});
+            await page.screenshot({path: filename, quality: 76})
         })
     }).catch(async reject => {
         console.log('[Error waitForSelector]')
@@ -48,4 +49,5 @@ if (!fs.existsSync('./temp/')) fs.mkdirSync('./temp/');
         await browser.close();
     })
     await browser.close();
+    }, 600)
 })();
