@@ -75,13 +75,22 @@ async def run_command(message_type: str, data: dict):
                     CCSUN.refreshToken()
                     info = CCSUN.getBandwidthStr()
                 await mirai_app.sendGroupMessage(ccsun_group, info)
-            if cq_message == "订阅":
-                info = CCSUN.getSubscribe()
+            if cq_message[:2] == "订阅":
+                keyword_len = 2
+                num = None
+                if len(cq_message) > keyword_len:
+                    num = cq_message[keyword_len:]
+                    if is_number(num): info = CCSUN.getSubscribeForMenu(num)
+                    if not is_number(num): return
+                else:
+                    info = CCSUN.getSubscribeForMenu()
                 if info == '':
                     CCSUN.Login()
-                    info = CCSUN.getSubscribe()
-                    if info == '':
-                        info = '[getSubscribe Error]\n获取数据失败'
+                    info = CCSUN.getSubscribeForMenu(num)
+                if info == '':
+                    info = '[getSubscribe Error]\n获取数据失败'
+                else:
+                    info = info
                 await mirai_app.sendGroupMessage(ccsun_group, info)
             if cq_message[:2] == "图表" or cq_message[:4] == "离线图表":
                 is_offline = True if cq_message[:2] == "图表" else False

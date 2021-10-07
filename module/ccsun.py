@@ -1,4 +1,5 @@
 import datetime
+import re
 import time
 import os
 import json
@@ -166,6 +167,43 @@ CREATE TABLE "ccsun" (
             return info
         except Exception as e:
             return str(f'[getBandwidthStr Error]\n{e}')
+
+    def getSubscribeForMenu(self, num=None):
+        session = requests.session()
+        url = f'https://{self.domain}/clientarea.php?action=productdetails&id={self.product}'
+        try:
+            res = session.get(url, headers=self.headers, cookies=self.config["cookie"], verify=False,
+                              allow_redirects=False)
+            html = res.content.decode('utf-8')
+            soup = BeautifulSoup(html, "lxml")
+            client_label = soup.find_all("div", {"class": "subscribe-label", "style": None})
+            subscribe_group = soup.find_all("div", {"class": "subscribe-group", "style": None})
+            i = 0
+            info = ''
+            if num is None:
+                for item in subscribe_group:
+                    _client_label = client_label[i].get_text().replace(' ', '').replace('\n', '')
+                    if len(_client_label) >= 4:
+                        _client_label = list(_client_label)
+                        _client_label[3] = '*'
+                        _client_label[4] = '*'
+                        _client_label = ''.join(_client_label)
+                    info += f'[{i + 1}]{_client_label}\n'
+                    i += 1
+                info = '请选择需要的订阅\n输入指令"订阅+数字"获取链接,如:订阅1\n' + info[:-1]
+            else:
+                num = int(num) - 1
+                if len(subscribe_group) > num >= 0:
+                    info = subscribe_group[num].get_text()
+                    links = re.search('https?:\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]', info)
+                    info = links[0]
+                else:
+                    if not len(subscribe_group) == 0:
+                        info = '该订阅不存在,如需获取订阅列表请回复"订阅"!'
+            return info
+        except Exception as e:
+            print(e)
+            return str(f'[getSubscribeForMenu Error]\n{e}')
 
     def getSubscribe(self):
         session = requests.session()
