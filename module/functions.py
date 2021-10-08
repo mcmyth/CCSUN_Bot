@@ -52,3 +52,23 @@ def days_before_month():
     last_month = today - datetime.timedelta(weeks=4)
     __days_before_month = calendar.monthrange(last_month.year, last_month.month)[1]
     return __days_before_month
+
+
+sub_task = []
+
+
+def querySubTask(member, auto_del=False):
+    if member in sub_task:
+        if auto_del:
+            sub_task.pop(sub_task.index(member))
+        return True
+    else:
+        return False
+
+
+def addSubTask(member):
+    if not querySubTask(member):
+        sub_task.append(member)
+        return True
+    else:
+        return False

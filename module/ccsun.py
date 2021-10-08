@@ -190,7 +190,7 @@ CREATE TABLE "ccsun" (
                         _client_label = ''.join(_client_label)
                     info += f'[{i + 1}]{_client_label}\n'
                     i += 1
-                info = '请选择需要的订阅\n输入指令"订阅+数字"获取链接,如:订阅1\n' + info[:-1]
+                info = '' if info[:-1] == '' else '请回复数字获取链接\n' + info[:-1]
             else:
                 num = int(num) - 1
                 if len(subscribe_group) > num >= 0:

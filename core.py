@@ -64,6 +64,10 @@ async def run_command(message_type: str, data: dict):
             cq_message = CQEncoder.messageChainToCQ(message)
             write_log(f"[{member.id}]{cq_message}", 1)
             command = commandDecode(cq_message)
+            if is_number(cq_message) and querySubTask(member.id, True):
+                cq_message = f'订阅{cq_message}'
+            else:
+                querySubTask(member.id, True)
             if cq_message == "登录":
                 CCSUN.Login()
                 info = '[Notice]\n已登录'
@@ -83,6 +87,7 @@ async def run_command(message_type: str, data: dict):
                     if is_number(num): info = CCSUN.getSubscribeForMenu(num)
                     if not is_number(num): return
                 else:
+                    addSubTask(member.id)
                     info = CCSUN.getSubscribeForMenu()
                 if info == '':
                     CCSUN.Login()
