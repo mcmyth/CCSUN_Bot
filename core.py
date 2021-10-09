@@ -72,7 +72,8 @@ async def run_command(message_type: str, data: dict):
             # 登录指令
             if cq_message == "登录":
                 CCSUN.Login()
-                info = '[Notice]\n已登录'
+                CCSUN.refreshToken()
+                info = '[Notice]\n已登录并刷新Token'
                 await mirai_app.sendGroupMessage(ccsun_group, info)
             # 流量指令
             if cq_message == "流量":
@@ -100,10 +101,10 @@ async def run_command(message_type: str, data: dict):
                     CCSUN.Login()
                     info = CCSUN.getSubscribeForMenu(num)
                 if info == '':
-                    info = '[getSubscribe Error]\n获取数据失败'
+                    info = '[getSubscribeForMenu Error]\n获取数据失败'
                 else:
                     info = info
-                await mirai_app.sendGroupMessage(ccsun_group, info)
+                await mirai_app.sendGroupMessage(ccsun_group, info, quoteSource=source if num is not None else None)
             # 图表指令
             if cq_message[:2] == "图表" or cq_message[:4] == "离线图表":
                 is_offline = True if cq_message[:2] == "图表" else False
