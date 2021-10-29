@@ -97,7 +97,6 @@ async def run_command(message_type: str, data: dict):
             if is_number(num): info = CCSUN.getSubscribeForMenu(num)
         else:
             # 获取订阅菜单
-            addSubTask(member.id)
             info = CCSUN.getSubscribeForMenu()
         # 获取失败重试一次
         if info == '':
@@ -105,6 +104,7 @@ async def run_command(message_type: str, data: dict):
             info = CCSUN.getSubscribeForMenu(num)
         info = info if info != '' else '[getSubscribeForMenu Error]\n获取数据失败'
         await mirai_app.sendGroupMessage(ccsun_group, info, quoteSource=source if num is not None else None)
+        if 'Error' not in info: addSubTask(member.id)
     # 图表指令
     if cq_message[:2] == "图表" or cq_message[:4] == "离线图表":
         is_offline = True if cq_message[:2] == "图表" else False
